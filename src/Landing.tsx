@@ -10,6 +10,7 @@ const Landing: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     return localStorage.getItem("theme") === "dark" || false;
   });
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const Landing: React.FC = () => {
       try {
         const payload = token.split(".")[1];
         const decoded = JSON.parse(atob(payload));
-        const role = decoded.user?.role; // Access nested role
+        const role = decoded.user?.role;
         console.log("Landing: token found, decoded:", decoded, "role:", role);
         if (role === "admin") {
           navigate("/dashboard", { replace: true });
@@ -48,6 +49,7 @@ const Landing: React.FC = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
+      setLoading(true); // Start loading
       try {
         const res = await fetch("http://localhost:3000/api/public/items");
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -57,6 +59,8 @@ const Landing: React.FC = () => {
         );
       } catch (error) {
         console.error("Fetch Courses Error:", error);
+      } finally {
+        setLoading(false); // End loading
       }
     };
     fetchCourses();
@@ -128,7 +132,9 @@ const Landing: React.FC = () => {
             </button>
           </div>
         </div>
-        {courses.length === 0 ? (
+        {loading ? (
+          <p className="text-center">Loading courses...</p>
+        ) : courses.length === 0 ? (
           <p className="text-center">
             No courses available. Please try again later.
           </p>

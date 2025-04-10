@@ -49,6 +49,7 @@ function App() {
     courseTitle: string;
     users: string[];
   } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,6 +66,7 @@ function App() {
   }, [isDarkMode, token, role]);
 
   useEffect(() => {
+    setLoading(true);
     console.log(
       "useEffect: token:",
       token,
@@ -83,27 +85,36 @@ function App() {
       setRole(urlRole as "user" | "admin");
       localStorage.setItem("token", urlToken);
       if (urlRole === "admin") {
-        fetchCourses(urlToken);
-        fetchStats(urlToken);
-        navigate("/dashboard", { replace: true });
+        fetchInitialAdminData(urlToken);
       } else if (urlRole === "user") {
         navigate("/user", { replace: true });
       }
+      setLoading(false);
       return;
     }
 
     if (token && role) {
       if (role === "admin" && location.pathname !== "/dashboard") {
-        fetchCourses(token);
-        fetchStats(token);
-        navigate("/dashboard", { replace: true });
+        fetchInitialAdminData(token);
       } else if (role === "user" && location.pathname !== "/user") {
         navigate("/user", { replace: true });
       }
     } else if (!token && location.pathname !== "/auth") {
       navigate("/auth", { replace: true });
     }
+    setLoading(false);
   }, [location.pathname, token, role, navigate]);
+
+  const fetchInitialAdminData = async (authToken: string) => {
+    try {
+      await Promise.all([fetchCourses(authToken), fetchStats(authToken)]);
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.error("Initial admin data fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchCourses = async (authToken: string) => {
     try {
@@ -186,7 +197,7 @@ function App() {
     const data = await res.json();
     if (res.ok) {
       setToken(data.token);
-      setRole("user");
+      setRole("user"); // Signup always creates a user, not admin
       setIsDarkMode(data.darkMode || false);
       localStorage.setItem("token", data.token);
       setUsername("");
@@ -282,15 +293,22 @@ function App() {
 
   const handleDeleteCourse = async (id: string) => {
     if (!token || role !== "admin") return;
-    const res = await fetch(`http://localhost:3000/api/item/${id}`, {
-      method: "DELETE",
-      headers: { "x-auth-token": token },
-    });
-    if (res.ok) {
-      fetchCourses(token);
-    } else {
-      const errorData = await res.json();
-      alert(`Failed to delete course: ${errorData.message || "Unknown error"}`);
+    try {
+      const res = await fetch(`http://localhost:3000/api/item/${id}`, {
+        method: "DELETE",
+        headers: { "x-auth-token": token },
+      });
+      if (res.ok) {
+        fetchCourses(token);
+      } else {
+        const errorData = await res.json();
+        alert(
+          `Failed to delete course: ${errorData.message || "Unknown error"}`
+        );
+      }
+    } catch (error) {
+      console.error("Delete Course Error:", error);
+      alert("An error occurred while deleting the course");
     }
   };
 
@@ -317,9 +335,54 @@ function App() {
             isDarkMode ? "bg-gray-800" : "bg-white"
           }`}
         >
-          <h1 className="text-2xl font-bold mb-6 flex items-center justify-center">
-            <GraduationCap className="mr-2" /> CourseHub
-          </h1>
+          <header
+            className={`${
+              isDarkMode ? "bg-gray-800" : "bg-white"
+            } shadow-sm mb-6`}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-center items-center">
+              <div className="flex items-center">
+                <GraduationCap
+                  className={`h-8 w-8 ${
+                    isDarkMode ? "text-indigo-400" : "text-indigo-600"
+                  }`}
+                />
+                <h1 className="ml-2 text-2xl font-bold">CourseHub</h1>
+              </div>
+            </div>
+          </header>
+          <nav className="mb-6">
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={() => {
+                  setActiveForm("signIn");
+                  navigate("/auth?role=admin");
+                }}
+                className={`px-4 py-2 rounded ${
+                  activeForm === "signIn" &&
+                  location.search.includes("role=admin")
+                    ? "bg-indigo-600 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                }`}
+              >
+                Admin
+              </button>
+              <button
+                onClick={() => {
+                  setActiveForm("signIn");
+                  navigate("/auth?role=user");
+                }}
+                className={`px-4 py-2 rounded ${
+                  activeForm === "signIn" &&
+                  location.search.includes("role=user")
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                }`}
+              >
+                User
+              </button>
+            </div>
+          </nav>
           <div className="flex justify-center space-x-4 mb-6">
             <button
               onClick={() => setActiveForm("signIn")}
@@ -417,7 +480,7 @@ function App() {
     );
   }
 
-  if (location.pathname === "/dashboard" && role === "admin") {
+  if (location.pathname === "/dashboard" && role === "admin" && !loading) {
     return (
       <div
         className={`min-h-screen ${
@@ -711,7 +774,7 @@ function App() {
       </div>
     );
   }
-  if (!token || role !== "user") {
+  if (!token || role !== "user" || loading) {
     return null;
   }
   return null;

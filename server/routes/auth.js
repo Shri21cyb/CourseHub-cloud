@@ -9,7 +9,18 @@ import passport from "passport";
 
 const router = express.Router();
 
-// Regular Signup Route
+// Pre-hash admin credentials outside the router
+const preHashAdminPasswords = async () => {
+  const adminCredentials = [
+    { username: "admin1", password: await bcrypt.hash("adminpass1", 10) },
+    { username: "admin2", password: await bcrypt.hash("adminpass2", 10) },
+  ];
+  return adminCredentials;
+};
+
+const validAdminCredentials = await preHashAdminPasswords();
+
+// Regular Signup Route (only for users)
 router.post("/signup", async (req, res) => {
   const { username, password } = req.body;
 
@@ -51,9 +62,10 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// Login Route
+// Login Route with Restricted Admin Access
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
+  const queryRole = req.query.role === "admin" ? "admin" : "user";
 
   try {
     let user = await User.findOne({ username });
@@ -68,18 +80,35 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    let role = account.role;
+    if (queryRole === "admin" && role === "admin") {
+      const isValidAdmin = validAdminCredentials.some(
+        (validAdmin) =>
+          validAdmin.username === username &&
+          bcrypt.compareSync(password, validAdmin.password)
+      );
+      if (!isValidAdmin) {
+        return res.status(403).json({
+          message:
+            "Unauthorized admin access. Only predefined admins are allowed.",
+        });
+      }
+    } else if (queryRole === "admin" && role !== "admin") {
+      role = "user"; // Force user role if not a valid admin
+    }
+
     const payload = {
       user: {
         id: account.id,
-        role: account.role,
+        role,
       },
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    console.log("Login success:", { username, role: account.role });
-    res.json({ token, role: account.role, darkMode: account.darkMode });
+    console.log("Login success:", { username, role });
+    res.json({ token, role, darkMode: account.darkMode });
   } catch (error) {
     console.error("Login Error:", error.message, error.stack);
     res.status(500).json({ message: "Server error during login" });
@@ -124,7 +153,6 @@ router.get(
         token,
       });
 
-      // Redirect based on role
       const baseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
       const redirectUrl =
         req.user.role === "admin"

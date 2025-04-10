@@ -91,6 +91,18 @@ A cloud-native microservice-based web app that lets users log in and manage a co
 
 ---
 
+## Admin Access
+The following admin accounts have been pre-seeded into the database for testing admin functionality:
+- **Username:** `admin1` | **Password:** `adminpass1`
+- **Username:** `admin2` | **Password:** `passadmin123`
+
+To test admin features:
+1. Start the application with `npm run dev`.
+2. Log in using one of the above credentials via the login page.
+3. Access admin-only routes (course management,number and people who have enrolled , number of views for the course) to verify restricted access.
+
+
+
 ## Local Deployment
 
 # Install dependencies

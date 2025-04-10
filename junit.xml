@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="2" failures="0" errors="0" time="5.466">
+  <testsuite name="Functional Verification Tests" errors="0" failures="0" skipped="0" timestamp="2025-04-10T08:35:57" time="5.371" tests="2">
+    <testcase classname="Functional Verification Tests returns 200 and &apos;API is running...&apos; for root endpoint" name="Functional Verification Tests returns 200 and &apos;API is running...&apos; for root endpoint" time="0.035">
+    </testcase>
+    <testcase classname="Functional Verification Tests fetches public courses from /api/public/items" name="Functional Verification Tests fetches public courses from /api/public/items" time="3.538">
+    </testcase>
+  </testsuite>
+</testsuites>

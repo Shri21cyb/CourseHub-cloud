@@ -1,0 +1,101 @@
+[
+  {
+    "title": "Introduction to Web Development",
+    "description": "Learn the fundamentals of web development including HTML, CSS, and JavaScript.",
+    "instructor": "John Doe",
+    "category": "Programming",
+    "price": 49.99,
+    "imageUrl": "https://tse2.mm.bing.net/th?id=OIP.Voyv5GlFcNUErkDbtTDv-gHaDt&pid=Api&P=0&h=180",
+    "duration": "8 weeks"
+  },
+  {
+    "title": "Cybersecurity Essentials",
+    "description": "Get started with ethical hacking, threat detection, and network security.",
+    "instructor": "Alice Morgan",
+    "category": "Cybersecurity",
+    "price": 39.99,
+    "imageUrl": "https://tse4.mm.bing.net/th?id=OIP.1_seg-IqXsYwM0zxRtLwCQAAAA&pid=Api&P=0&h=180",
+    "duration": "6 weeks"
+  },
+  {
+    "title": "Data Structures & Algorithms in C++",
+    "description": "Master DSA concepts using C++ with tons of practice problems.",
+    "instructor": "Raj Patel",
+    "category": "Programming",
+    "price": 29.99,
+    "imageUrl": "https://repository-images.githubusercontent.com/403817624/3d10f761-1027-4d0a-9906-48361e466d87",
+    "duration": "5 weeks"
+  },
+  {
+    "title": "Python for Data Analysis",
+    "description": "Analyze and visualize data using Python, Pandas, and Matplotlib.",
+    "instructor": "Sara Lee",
+    "category": "Data Science",
+    "price": 34.99,
+    "imageUrl": "https://ideacdn.net/idea/ct/82/myassets/blogs/python-avantaj.jpg?revision=1581874510",
+    "duration": "4 weeks"
+  },
+  {
+    "title": "Cloud Computing Basics",
+    "description": "Understand cloud models, deployment, and intro to AWS, Azure, GCP.",
+    "instructor": "David Kim",
+    "category": "Cloud",
+    "price": 45.0,
+    "imageUrl": "https://tse3.mm.bing.net/th?id=OIP.F1Clgxjw9IsDtdNyLzJRIAHaE6&pid=Api&P=0&h=180",
+    "duration": "6 weeks"
+  },
+  {
+    "title": "Full-Stack Development with MERN",
+    "description": "Build full-stack apps using MongoDB, Express, React, and Node.",
+    "instructor": "Lina Zhao",
+    "category": "Programming",
+    "price": 59.99,
+    "imageUrl": "https://tse3.mm.bing.net/th?id=OIP.42lzWZay8f4vcsmRy9YbqwHaD6&pid=Api&P=0&h=180",
+    "duration": "10 weeks"
+  },
+  {
+    "title": "Linux for Beginners",
+    "description": "Learn the Linux command line and system basics for devs and hackers.",
+    "instructor": "Tom Ryder",
+    "category": "Operating Systems",
+    "price": 19.99,
+    "imageUrl": "https://www.extremetech.com/wp-content/uploads/2012/05/Linux-logo-without-version-number-banner-sized.jpg",
+    "duration": "3 weeks"
+  },
+  {
+    "title": "Kubernetes Crash Course",
+    "description": "Deploy, manage, and scale containerized apps using Kubernetes.",
+    "instructor": "Olivia Wang",
+    "category": "DevOps",
+    "price": 44.99,
+    "imageUrl": "https://tse2.mm.bing.net/th?id=OIP.K5GMlbO0fKuuFzo66jqujQHaEK&pid=Api&P=0&h=180",
+    "duration": "4 weeks"
+  },
+  {
+    "title": "Networking Fundamentals",
+    "description": "Dive into networking concepts: IP, TCP/UDP, DNS, and routing.",
+    "instructor": "Alex Carter",
+    "category": "Networking",
+    "price": 24.99,
+    "imageUrl": "https://tse3.mm.bing.net/th?id=OIP.6PNIQehAQTz4bpxzO4PL3AHaFg&pid=Api&P=0&h=180",
+    "duration": "5 weeks"
+  },
+  {
+    "title": "Machine Learning with Scikit-Learn",
+    "description": "Intro to ML concepts with hands-on projects using Scikit-Learn.",
+    "instructor": "Priya Nair",
+    "category": "Machine Learning",
+    "price": 39.99,
+    "imageUrl": "https://tse1.mm.bing.net/th?id=OIP.zIerSV77VUkJxKL39YtVdAHaE8&pid=Api&P=0&h=180",
+    "duration": "6 weeks"
+  },
+  {
+    "title": "Ethical Hacking: Tools and Techniques",
+    "description": "Learn common hacking tools and how to ethically exploit vulnerabilities.",
+    "instructor": "Mike Ross",
+    "category": "Cybersecurity",
+    "price": 49.99,
+    "imageUrl": "https://tse4.mm.bing.net/th?id=OIP.4B_xGn5yHa5CLVtuSb-BowHaFf&pid=Api&P=0&h=180",
+    "duration": "8 weeks"
+  }
+]
